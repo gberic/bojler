@@ -28,8 +28,14 @@ Adafruit_SSD1306 display(-1);
 RTC_DS1307 RTC;
 int bojler = 0;
 int jeftina = 0;
+int grejac = 4;
+int taster = 3;
+bool taster_klik = false;
+int brojac = 0;
+bool rucno = false;
 void setup() {
-  pinMode(13, OUTPUT);          // sets the digital pin 13 as output
+  pinMode(grejac, OUTPUT);          // sets the digital pin 4 as output
+  pinMode(taster, INPUT); // taster
   // initialize and clear display
   display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR);
   display.clearDisplay();
@@ -73,18 +79,21 @@ void setup() {
 void loop () {
     DateTime now = RTC.now();
 
-//    Serial.print(' ');
-//    Serial.print(now.hour(), DEC);
-//    Serial.print(':');
-//    Serial.print(now.minute(), DEC);
-//    Serial.print(':');
-//    Serial.print(now.second(), DEC);
-//    Serial.println();
+    Serial.print(' ');
+    Serial.print(now.hour(), DEC);
+    Serial.print(':');
+    Serial.print(now.minute(), DEC);
+    Serial.print(':');
+    Serial.print(now.second(), DEC);
+    Serial.println();
+    Serial.println(bojler);
+
     delay(1000);
 
 
 if(now.hour()>22 || now.hour()<7)
-    {jeftina =1;}
+    {jeftina =1;
+    rucno = false;}
     else {jeftina =0;}
 
 if(now.hour()>2 && now.hour()<7)
@@ -110,8 +119,10 @@ display.print(now.year(), DEC);
   display.setTextColor(WHITE);
   display.setCursor(2,15);
 
-if (jeftina == 1){display.print("NT +");}
-else {display.print("VT +");}
+if (jeftina == 1){display.print("NT "); }
+else {display.print("VT ");}
+if (rucno == true){display.print("R ");}
+if (rucno == false){display.print("A ");}
 display.print(sensors.getTempCByIndex(0));
 
 
@@ -133,16 +144,32 @@ display.print(sensors.getTempCByIndex(0));
   // update display with all of the above graphics
 
  display.display();
+taster_klik = digitalRead(taster);
+if (taster_klik == true)
+{brojac++;
+  if (brojac >=2)
+  {brojac = 0;
+  rucno = !rucno;
+ }
+}
+if (taster_klik == false){brojac = 0;}
 
-if (bojler ==1 && sensors.getTempCByIndex(0)< 40){digitalWrite(13, HIGH);}
-if (bojler ==0 || sensors.getTempCByIndex(0)> 58){digitalWrite(13, LOW);}
-else {digitalWrite(13, LOW);}
+if (rucno == true)
+{ if (sensors.getTempCByIndex(0)< 42){digitalWrite(grejac, HIGH);}
+  if (sensors.getTempCByIndex(0)> 45){digitalWrite(grejac, LOW);}
+}
+
+if (rucno == false)
+{ if (bojler == 1 && sensors.getTempCByIndex(0)< 42){digitalWrite(grejac, HIGH);}
+  if (bojler == 0 || sensors.getTempCByIndex(0)> 45){digitalWrite(grejac, LOW);}
+}
+
 
 //  Serial.print("Requesting temperatures...");
   sensors.requestTemperatures(); // Send the command to get temperatures
 //  Serial.println("DONE");
   // After we got the temperatures, we can print them here.
   // We use the function ByIndex, and as an example get the temperature from the first sensor only.
-//  Serial.print("Temperature for the device 1 (index 0) is: ");
+ // Serial.print("Temperature for the device 1 (index 0) is: ");
 //  Serial.println(sensors.getTempCByIndex(0));
 }

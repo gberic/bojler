@@ -65,7 +65,7 @@ void setup() {
     // This will reflect the time that your sketch was compiled
     RTC.adjust(DateTime(__DATE__, __TIME__));
   }
-  // RTC.adjust(DateTime(__DATE__, __TIME__));
+//   RTC.adjust(DateTime(__DATE__, __TIME__)); //raskomentiraj ovu liniju ya podesavanje tekuceh=g vremena
 }
 
 
@@ -134,8 +134,8 @@ display.print(sensors.getTempCByIndex(0));
 
  display.display();
 
-if (bojler ==1 && sensors.getTempCByIndex(0)< 60){digitalWrite(13, HIGH);}
-if (bojler ==0 || sensors.getTempCByIndex(0)> 80){digitalWrite(13, LOW);}
+if (bojler ==1 && sensors.getTempCByIndex(0)< 40){digitalWrite(13, HIGH);}
+if (bojler ==0 || sensors.getTempCByIndex(0)> 58){digitalWrite(13, LOW);}
 else {digitalWrite(13, LOW);}
 
 //  Serial.print("Requesting temperatures...");

@@ -155,13 +155,13 @@ if (taster_klik == true)
 if (taster_klik == false){brojac = 0;}
 
 if (rucno == true)
-{ if (sensors.getTempCByIndex(0)< 42){digitalWrite(grejac, HIGH);}
-  if (sensors.getTempCByIndex(0)> 45){digitalWrite(grejac, LOW);}
+{ if (sensors.getTempCByIndex(0)< 49){digitalWrite(grejac, HIGH);}
+  if (sensors.getTempCByIndex(0)> 50){digitalWrite(grejac, LOW);}
 }
 
 if (rucno == false)
-{ if (bojler == 1 && sensors.getTempCByIndex(0)< 42){digitalWrite(grejac, HIGH);}
-  if (bojler == 0 || sensors.getTempCByIndex(0)> 45){digitalWrite(grejac, LOW);}
+{ if (bojler == 1 && sensors.getTempCByIndex(0)< 49){digitalWrite(grejac, HIGH);}
+  if (bojler == 0 || sensors.getTempCByIndex(0)> 50){digitalWrite(grejac, LOW);}
 }
 
 
